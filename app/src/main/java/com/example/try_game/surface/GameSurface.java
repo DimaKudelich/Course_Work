@@ -172,7 +172,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-
+        canvas.drawText("Kills: "+ score,0,0,null);
 
         canvas.drawBitmap(fon,0,0,null);
 
