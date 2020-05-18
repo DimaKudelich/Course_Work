@@ -84,26 +84,34 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             bullet.update();
         }
 
-        for (Enemy enemy : enemies) {
-            enemy.update();
-            enemy.setMoveX(hero.getX() - enemy.getX());
-            enemy.setMoveY(hero.getY() - enemy.getY());
-        }
-
         if (time - lastSpawnTime > spawnPause) {
             Random rand = new Random();
             int randPlace = Math.abs(rand.nextInt()) % 3;
 
+            int xN,yN;
+
             if (randPlace == 0) {
-                this.enemy.setCoords(0, 0);
+                //this.enemy.setCoords(0, 0);
+                xN = 0;
+                yN=0;
             } else if (randPlace == 1) {
-                this.enemy.setCoords(this.getWidth() - enemy.getWidth(), 0);
+                //this.enemy.setCoords(this.getWidth() - enemy.getWidth(), 0);
+                xN = this.getWidth() - enemy.getWidth();
+                yN = 0;
             } else {
-                this.enemy.setCoords(this.getWidth() - enemy.getWidth(), this.getHeight() - enemy.getHeight());
+                //this.enemy.setCoords(this.getWidth() - enemy.getWidth(), this.getHeight() - enemy.getHeight());
+                xN = this.getWidth() - enemy.getWidth();
+                yN = this.getHeight() - enemy.getHeight();
             }
 
-            enemies.add(this.enemy);
+            enemies.add(new Enemy(this,this.enemy.getBitmap(),xN,yN,0,0));
             lastSpawnTime = time;
+        }
+
+        for (Enemy enemy : enemies) {
+            enemy.setMoveX(hero.getX() - enemy.getX());
+            enemy.setMoveY(hero.getY() - enemy.getY());
+            enemy.update();
         }
 
         this.hero.update();
@@ -198,7 +206,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         //Получение картинки
-        this.fon = BitmapFactory.decodeResource(this.getResources(),R.drawable.fon);
+        this.fon = BitmapFactory.decodeResource(this.getResources(),R.drawable.fon_igri);
         Bitmap heroBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hero);
         Bitmap bullet = BitmapFactory.decodeResource(this.getResources(), R.drawable.bullet);
         Bitmap enemy = BitmapFactory.decodeResource(this.getResources(), R.drawable.enemy);
@@ -212,6 +220,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         this.enemies = new ArrayList<>();
         this.enemy = new Enemy(this, enemy, 800, 200, 300, 400);
+        //this.enemies.add(this.enemy);
 
         //Создание потока
         this.gameThread = new GameThread(this, holder);
