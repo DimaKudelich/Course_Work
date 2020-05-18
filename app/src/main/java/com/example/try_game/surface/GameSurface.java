@@ -22,6 +22,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     //Игровой поток
     private GameThread gameThread;
 
+    private int score = 0;
+
     private Bitmap fon;
 
     //Герой
@@ -61,6 +63,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
                 if (bullets.get(i).isStrikesWithEnemy(enemies.get(j))) {
                     bullets.remove(i);
                     enemies.remove(j);
+                    score+=1;
 
                     if (spawnPause > spawnBorder) {
                         spawnPause -= 100;
@@ -81,9 +84,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         for (Enemy enemy : enemies) {
             enemy.update();
-            if (this.hero.isCharacterStrikesWithObject(enemy)) {
-                //this.gameThread.setRunning(false);
-            }
+            enemy.setMoveX(hero.getX() - enemy.getX());
+            enemy.setMoveY(hero.getY() - enemy.getY());
         }
 
         if (time - lastSpawnTime > spawnPause) {
@@ -100,11 +102,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
             enemies.add(this.enemy);
             lastSpawnTime = time;
-        }
-
-        for (Enemy enemy : enemies) {
-            enemy.setMoveX(hero.getX() - enemy.getX());
-            enemy.setMoveY(hero.getY() - enemy.getY());
         }
 
         this.hero.update();
@@ -175,6 +172,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+
+
         canvas.drawBitmap(fon,0,0,null);
 
         for (Bullet bullet : bullets) {
@@ -207,7 +206,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         this.enemies = new ArrayList<>();
         this.enemy = new Enemy(this, enemy, 800, 200, 300, 400);
-        enemies.add(this.enemy);
 
         //Создание потока
         this.gameThread = new GameThread(this, holder);
