@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -172,7 +174,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        canvas.drawText("Kills: "+ score,0,0,null);
+        Paint paint = new Paint();
+        paint.setTextSize(50f);
+        paint.setColor(Color.WHITE);
 
         canvas.drawBitmap(fon,0,0,null);
 
@@ -186,6 +190,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         for (Enemy enemy : enemies) {
             enemy.draw(canvas);
         }
+
+        canvas.drawText("Kills: "+ score,100,100,paint);
     }
 
     //Создание поверхности
