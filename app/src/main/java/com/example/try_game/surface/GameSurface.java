@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -49,6 +51,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     //Управление
     private ControlBar controlBar;
+
+    private SoundPool sounds;
+    private int shot;
 
     public GameSurface(Context context) {
         super(context);
@@ -132,6 +137,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             int ind = event.getActionIndex();
             if (currentTime - lastShot > 200) {
                 bullets.add(new Bullet(this, bullet.getBitmap(), hero.getX()+hero.getWidth()/2, hero.getY()+hero.getHeight()/2,(int)event.getX(ind), (int)event.getY(ind)));
+                sounds.play(shot,1.0f, 1.0f, 0, 0, 1.5f);
                 lastShot = System.nanoTime() / 1000000;
             }
         }
@@ -163,6 +169,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getAction() != MotionEvent.ACTION_MOVE) {
                 if (currentTime - lastShot > 200) {
                     bullets.add(new Bullet(this, bullet.getBitmap(), hero.getX()+hero.getWidth()/2, hero.getY()+hero.getHeight()/2, x, y));
+                    sounds.play(shot,1.0f, 1.0f, 0, 0, 1.5f);
                     lastShot = System.nanoTime() / 1000000;
                 }
             }
@@ -220,7 +227,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         this.enemies = new ArrayList<>();
         this.enemy = new Enemy(this, enemy, 800, 200, 300, 400);
-        //this.enemies.add(this.enemy);
+
+        this.sounds = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
+        this.shot = sounds.load(getContext(),R.raw.shot,1);
 
         //Создание потока
         this.gameThread = new GameThread(this, holder);
