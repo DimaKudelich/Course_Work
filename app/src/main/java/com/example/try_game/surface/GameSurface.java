@@ -54,6 +54,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     private SoundPool sounds;
     private int shot;
+    private int kill;
+    private int appear;
 
     public GameSurface(Context context) {
         super(context);
@@ -70,6 +72,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
                 if (bullets.get(i).isStrikesWithEnemy(enemies.get(j))) {
                     bullets.remove(i);
                     enemies.remove(j);
+                    sounds.play(kill,1.0f, 1.0f, 0, 0, 1.5f);
                     score+=1;
 
                     if (spawnPause > spawnBorder) {
@@ -96,21 +99,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             int xN,yN;
 
             if (randPlace == 0) {
-                //this.enemy.setCoords(0, 0);
                 xN = 0;
                 yN=0;
             } else if (randPlace == 1) {
-                //this.enemy.setCoords(this.getWidth() - enemy.getWidth(), 0);
                 xN = this.getWidth() - enemy.getWidth();
                 yN = 0;
             } else {
-                //this.enemy.setCoords(this.getWidth() - enemy.getWidth(), this.getHeight() - enemy.getHeight());
                 xN = this.getWidth() - enemy.getWidth();
                 yN = this.getHeight() - enemy.getHeight();
             }
 
             enemies.add(new Enemy(this,this.enemy.getBitmap(),xN,yN,0,0));
             lastSpawnTime = time;
+            sounds.play(appear,1.0f, 1.0f, 0, 0, 1.5f);
         }
 
         for (Enemy enemy : enemies) {
@@ -230,6 +231,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         this.sounds = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
         this.shot = sounds.load(getContext(),R.raw.shot,1);
+        this.kill = sounds.load(getContext(),R.raw.kill,1);
+        this.appear = sounds.load(getContext(),R.raw.appear,1);
 
         //Создание потока
         this.gameThread = new GameThread(this, holder);
