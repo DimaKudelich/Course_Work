@@ -36,14 +36,26 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(new GameSurface(this));
     }
+
+    @Override
+    public void onBackPressed(){
+        stopService(new Intent(this,MusicService.class));
+
+        Intent intent = new Intent(MainActivity.this,Menu.class);
+        startActivity(intent);
+
+        finish();
+    }
+
     @Override
     protected void onDestroy(){
+        stopService(new Intent(this,MusicService.class));
         super.onDestroy();
     }
 
     @Override
     protected void onStop(){
-        super.onStop();
         stopService(new Intent(this,MusicService.class));
+        super.onStop();
     }
 }
