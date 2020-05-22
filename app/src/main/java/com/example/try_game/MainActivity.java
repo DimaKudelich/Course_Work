@@ -13,7 +13,7 @@ import com.example.try_game.objects.MusicService;
 import com.example.try_game.surface.GameSurface;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String TAG = MainActivity.class.getSimpleName();
+    private GameSurface surface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         startService(new Intent(this, MusicService.class));
 
-        setContentView(new GameSurface(this));
+        surface = new GameSurface(this);
+
+        setContentView(surface);
     }
 
     @Override
     public void onBackPressed(){
         stopService(new Intent(this,MusicService.class));
+        //surface.surfaceDestroyed(surface.getHolder());
 
         Intent intent = new Intent(MainActivity.this,Menu.class);
         startActivity(intent);

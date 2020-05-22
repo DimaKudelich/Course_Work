@@ -115,6 +115,10 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         for (Enemy enemy : enemies) {
+            if (hero.isCharacterStrikesWithObject(enemy)){
+                break;
+            }
+
             enemy.setMoveX(hero.getX() - enemy.getX());
             enemy.setMoveY(hero.getY() - enemy.getY());
             enemy.update();
@@ -218,8 +222,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap heroBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hero);
         Bitmap bullet = BitmapFactory.decodeResource(this.getResources(), R.drawable.bullet);
         Bitmap enemy = BitmapFactory.decodeResource(this.getResources(), R.drawable.enemy);
+
         //Инициализация героя
-        this.hero = new Character(this, heroBitmap, 100, 50);
+        this.hero = new Character(this, heroBitmap, getWidth()/2, getHeight()/2);
         //Инициализация панели управления
         this.controlBar = new ControlBar(this, 300, 800, 200);
         //Инициализация пули и массива пуль
