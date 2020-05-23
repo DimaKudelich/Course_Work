@@ -42,23 +42,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         stopService(new Intent(this,MusicService.class));
-        //surface.surfaceDestroyed(surface.getHolder());
 
         Intent intent = new Intent(MainActivity.this,Menu.class);
         startActivity(intent);
 
         finish();
+        super.onStop();
     }
 
     @Override
     protected void onDestroy(){
         stopService(new Intent(this,MusicService.class));
+
         super.onDestroy();
     }
 
     @Override
     protected void onStop(){
         stopService(new Intent(this,MusicService.class));
+
         super.onStop();
     }
 }

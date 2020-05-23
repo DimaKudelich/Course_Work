@@ -149,11 +149,6 @@ public class Enemy extends GameObject {
         }
     }
 
-    public void setCoords(int x,int y){
-        this.x = x;
-        this.y = y;
-    }
-
     public void setMoveX(int moveX) {
         this.moveX = moveX;
     }

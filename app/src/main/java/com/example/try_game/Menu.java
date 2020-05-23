@@ -1,8 +1,10 @@
 package com.example.try_game;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +17,7 @@ import java.util.Objects;
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,12 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
                 }catch (Exception e){ }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        System.exit(0);
+        finish();
     }
 
     @Override
