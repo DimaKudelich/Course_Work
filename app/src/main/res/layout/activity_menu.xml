@@ -13,9 +13,20 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
-        android:text="My course work"
+        android:text="@string/my_course_work"
         android:textSize="50sp"
         android:textColor="#000"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:text="@string/your_record"
+        android:textSize="30sp"
+        android:textColor="#111"/>
 
     <Button
         android:id="@+id/button1"
@@ -25,7 +36,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp"
         android:layout_marginBottom="20dp"
-        android:text="Start"
+        android:text="@string/start"
         android:textSize="20sp"
         android:textColor="#000"
         android:background="#fff"/>
@@ -37,7 +48,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="230dp"
-        android:text="Exit"
+        android:text="@string/exit"
         android:textSize="20sp"
         android:textColor="#000"
         android:background="#fff"/>

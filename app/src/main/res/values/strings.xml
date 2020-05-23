@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">try_game</string>
+    <string name="app_name">Game</string>
+    <string name="my_course_work">My course work</string>
+    <string name="your_record">Your record:</string>
+    <string name="start">Start</string>
+    <string name="exit">Exit</string>
+    <integer name="rec">0</integer>
 </resources>
