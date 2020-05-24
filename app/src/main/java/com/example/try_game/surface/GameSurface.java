@@ -1,6 +1,9 @@
 package com.example.try_game.surface;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.try_game.Menu;
 import com.example.try_game.R;
 import com.example.try_game.objects.Bullet;
 import com.example.try_game.objects.Character;
@@ -27,6 +31,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
 
     private int score = 0;
+    private int rec;
 
     private Bitmap fon;
 
@@ -57,10 +62,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private int kill;
     private int appear;
 
-    public GameSurface(Context context) {
+    SharedPreferences sp;
+    final String RECORD = "record";
+
+    public GameSurface(Context context,SharedPreferences sp) {
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
+        this.sp = sp;
+        load();
     }
 
     //Обновление состояния игровой поверхности
@@ -72,8 +82,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
                 if (bullets.get(i).isStrikesWithEnemy(enemies.get(j))) {
                     bullets.remove(i);
                     enemies.remove(j);
-                    sounds.play(kill,1.0f, 1.0f, 0, 0, 1.5f);
-                    score+=1;
+                    sounds.play(kill, 1.0f, 1.0f, 0, 0, 1.5f);
+                    score += 1;
+
+                    if (rec < score) {
+                        rec = score;
+                    }
 
                     if (spawnPause > spawnBorder) {
                         spawnPause -= 100;
@@ -116,6 +130,13 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         for (Enemy enemy : enemies) {
             if (hero.isCharacterStrikesWithObject(enemy)){
+                this.gameThread.setRunning(false);
+
+                Context context = getContext();
+                Intent intent = new Intent(context, Menu.class);
+                save();
+                context.startActivity(intent);
+                ((Activity)context).finish();
                 break;
             }
 
@@ -198,7 +219,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTextSize(50f);
         paint.setColor(Color.WHITE);
 
-        canvas.drawBitmap(fon,0,0,null);
+        canvas.drawBitmap(fon, 0, 0, null);
 
         for (Bullet bullet : bullets) {
             bullet.draw(canvas);
@@ -211,7 +232,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             enemy.draw(canvas);
         }
 
-        canvas.drawText("Kills: "+ score,100,100,paint);
+        if (score != rec) {
+            canvas.drawText("Kills: " + score, 100, 100, paint);
+            canvas.drawText("Record: " + rec, 100, 150, paint);
+        } else {
+            canvas.drawText("New record: " + rec, 100, 100, paint);
+        }
     }
 
     //Создание поверхности
@@ -255,22 +281,31 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
+        this.gameThread.setRunning(false);
+        save();
 
         while (retry) {
             try {
                 //Попытка остановить работу поверхности
-                this.gameThread.setRunning(false);
-
                 this.gameThread.join();
+                retry = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            retry = true;
         }
     }
 
     public GameThread getGameThread(){
         return gameThread;
+    }
+
+    void load(){
+        rec = sp.getInt(RECORD,0);
+    }
+
+    void save(){
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putInt(RECORD,rec);
+        ed.commit();
     }
 }

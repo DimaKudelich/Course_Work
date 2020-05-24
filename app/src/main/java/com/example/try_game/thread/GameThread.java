@@ -36,7 +36,7 @@ public class GameThread extends Thread {
             //Объект, инструмент для рисования
             Canvas canvas = null;
             try {
-                //Получаем canvas из holder и блокируем его
+                //Получаем canvas из holder и выполняем отрисовку
                 canvas = this.surfaceHolder.lockCanvas();
 
                 //Если метод не используется другим потоком - он запускается
